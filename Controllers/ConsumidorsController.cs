@@ -21,7 +21,7 @@ namespace ExperimentoAPI.Controllers
             _jwtService = jwtService;
         }
 
-        [HttpGet("VerProductos")]
+        [HttpGet("VerUsuarios")]
         public async Task<ActionResult<IEnumerable<Consumidor>>> GetConsumidor()
         {
             return await _context.Consumidor.ToListAsync();
@@ -50,8 +50,22 @@ namespace ExperimentoAPI.Controllers
             _context.carritos.Add(nuevoCarrito);
             await _context.SaveChangesAsync();
 
+           
+            return Ok(new { message = "Usuario registrado con éxito."});
+        }
+
+
+        [HttpPost("Login")]
+
+        public async Task<IActionResult> Login(string usuario,string contraseña)
+        {
+            var consumidor = await _context.Consumidor.FirstOrDefaultAsync(c=>c.Username == usuario);
+            if (consumidor==null || consumidor.Password !=contraseña )
+            {
+                return Unauthorized("Usuario o contraseña incorrectos");
+            }
             var token = _jwtService.GenerarToken(consumidor);
-            return Ok(new { message = "Usuario registrado con éxito.",token });
+            return Ok(new { message = "Sesion exitosa", token });
         }
     }
 }

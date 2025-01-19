@@ -3,6 +3,7 @@ using System;
 using ExperimentoAPI.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace ExperimentoAPI.Migrations
 {
     [DbContext(typeof(InventoryDbContext))]
-    partial class InventoryDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250118075912_AddUsuarioRolRelationship")]
+    partial class AddUsuarioRolRelationship
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -106,12 +109,7 @@ namespace ExperimentoAPI.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int?>("idRol")
-                        .HasColumnType("integer");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("idRol");
 
                     b.ToTable("Consumidor");
                 });
@@ -201,35 +199,6 @@ namespace ExperimentoAPI.Migrations
                     b.ToTable("productos2");
                 });
 
-            modelBuilder.Entity("ExperimentoAPI.Models.Rol", b =>
-                {
-                    b.Property<int>("id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("id"));
-
-                    b.Property<string>("nombre")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("id");
-
-                    b.ToTable("roles");
-
-                    b.HasData(
-                        new
-                        {
-                            id = 1,
-                            nombre = "admin"
-                        },
-                        new
-                        {
-                            id = 2,
-                            nombre = "usuario"
-                        });
-                });
-
             modelBuilder.Entity("ExperimentoAPI.Models.Usuario", b =>
                 {
                     b.Property<int>("id")
@@ -303,15 +272,6 @@ namespace ExperimentoAPI.Migrations
                     b.Navigation("Producto");
                 });
 
-            modelBuilder.Entity("ExperimentoAPI.Models.Consumidor", b =>
-                {
-                    b.HasOne("ExperimentoAPI.Models.Rol", "rol")
-                        .WithMany("Consumidores")
-                        .HasForeignKey("idRol");
-
-                    b.Navigation("rol");
-                });
-
             modelBuilder.Entity("ExperimentoAPI.Models.DetalleVenta", b =>
                 {
                     b.HasOne("ExperimentoAPI.Models.Venta", null)
@@ -343,11 +303,6 @@ namespace ExperimentoAPI.Migrations
             modelBuilder.Entity("ExperimentoAPI.Models.Consumidor", b =>
                 {
                     b.Navigation("Carritos");
-                });
-
-            modelBuilder.Entity("ExperimentoAPI.Models.Rol", b =>
-                {
-                    b.Navigation("Consumidores");
                 });
 
             modelBuilder.Entity("ExperimentoAPI.Models.Venta", b =>

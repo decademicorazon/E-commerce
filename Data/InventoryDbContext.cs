@@ -18,7 +18,9 @@ namespace ExperimentoAPI.Data
 
         public DbSet<Venta> ventas { get; set; }
         public DbSet<DetalleVenta> detallesVenta { get; set; }
-        
+
+        public DbSet<Rol> roles { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Producto>().ToTable("productos");
@@ -45,14 +47,21 @@ namespace ExperimentoAPI.Data
                 .HasForeignKey(d => d.ventaId);
 
             modelBuilder.Entity<Producto2>()
-                .HasOne(p=>p.categoria)
-                .WithMany(c=>c.productos)
-                .HasForeignKey(p=>p.idCategoria);
+                .HasOne(p => p.categoria)
+                .WithMany(c => c.productos)
+                .HasForeignKey(p => p.idCategoria);
+
+            modelBuilder.Entity<Consumidor>()
+                .HasOne(c => c.rol)
+                .WithMany(r => r.Consumidores)
+                .HasForeignKey(c => c.idRol);
+
+            modelBuilder.Entity<Rol>().HasData(
+           new Rol { id = 1, nombre = "admin" },
+           new Rol { id = 2, nombre = "usuario" });
 
 
 
-
-            
         }
 
 

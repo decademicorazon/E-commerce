@@ -13,6 +13,9 @@ namespace ExperimentoAPI.Models
 
         [JsonIgnore]
         public ICollection<Carrito> Carritos { get; set; }
-        
+
+        public int? idRol { get; set; }
+        public Rol rol { get; set; }
+
     }
 }
